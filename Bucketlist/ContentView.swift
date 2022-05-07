@@ -8,6 +8,16 @@
 
 import SwiftUI
 
+extension AnyTransition {
+    static var moveAndFade: AnyTransition {
+        .asymmetric(
+            insertion: .move(edge: .trailing).combined(with: .opacity),
+            removal: .scale.combined(with: .opacity)
+        )
+    }
+}
+
+
 struct ContentView: View {
     @StateObject var viewModel = ViewModel()
     
@@ -28,6 +38,8 @@ struct ContentView: View {
                     Image(systemName: "bell")
                     Text("Notifications")
                 }
+                .transition(.moveAndFade)
+            
         }
         .environmentObject(viewModel)
         

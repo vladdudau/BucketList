@@ -28,6 +28,9 @@ struct ListView: View {
                             Text(location.country ?? "Unknown")
 //                        }
                     }
+                    .onTapGesture {
+                        viewModel.selectedPlace = location
+                    }
                 
                 
             }
@@ -35,6 +38,11 @@ struct ListView: View {
             
                 .navigationBarTitle(Text("Bucket List"))
             
+        }
+        .sheet( item: $viewModel.selectedPlace) { place in
+            EditView(location: place) { newLocation in
+                viewModel.update(location: newLocation)
+            }
         }
         
         

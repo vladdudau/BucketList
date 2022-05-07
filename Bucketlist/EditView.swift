@@ -24,10 +24,41 @@ struct EditView: View {
     @State private var loadingState = LoadingState.loading
     @State private var loadingWeatherState = LoadingState.loading
     
+    
     @State private var pages = [Page]()
     @State private var weatherDays = [WeatherListItem]()
 
     
+    struct LoadingCell : View {
+        
+        @State var shouldAnimate = false
+        
+        var body: some View {
+            HStack {
+                        Circle()
+                            .fill(Color.blue)
+                            .frame(width: 20, height: 20)
+                            .scaleEffect(shouldAnimate ? 1.0 : 0.5)
+                            .animation(Animation.easeInOut(duration: 0.5).repeatForever(), value: shouldAnimate)
+                        Circle()
+                            .fill(Color.blue)
+                            .frame(width: 20, height: 20)
+                            .scaleEffect(shouldAnimate ? 1.0 : 0.5)
+                            .animation(Animation.easeInOut(duration: 0.5).repeatForever().delay(0.3), value: shouldAnimate)
+                        Circle()
+                            .fill(Color.blue)
+                            .frame(width: 20, height: 20)
+                            .scaleEffect(shouldAnimate ? 1.0 : 0.5)
+                            .animation(Animation.easeInOut(duration: 0.5).repeatForever().delay(0.6), value: shouldAnimate)
+                    }
+                    .onAppear {
+                        self.shouldAnimate = true
+                    }
+                    .onDisappear {
+                        self.shouldAnimate = false
+                    }
+        }
+    }
     
     struct WeatherCell : View {
         let weatherDay : WeatherListItem
@@ -37,30 +68,50 @@ struct EditView: View {
                 let hour = Calendar.current.component(.hour, from: weatherDay.dtTxt)
                 if((10...12).contains(hour) || (20...23).contains(hour)) {
                     
-                    HStack {
-                    AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherDay.weather[0].icon)@2x.png")) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Color.red
-                    }
+                    HStack() {
+                        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherDay.weather[0].icon)@2x.png"), transaction: Transaction(animation: .easeIn(duration:3)))
+                        {
+                            phase in
+                            switch phase {
+                                case .empty:
+                                    Color.purple.opacity(0.1)
+                             
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .transition(.slide)
+                             
+                                case .failure(_):
+                                    Image(systemName: "exclamationmark.icloud")
+                                        .resizable()
+                                        .scaledToFit()
+                             
+                                @unknown default:
+                                    Image(systemName: "exclamationmark.icloud")
+                            }
+                        }
                     .frame(width: 48, height: 48)
                     .clipShape(RoundedRectangle(cornerRadius: 25))
-                    VStack(alignment: .leading) {
-                    Text(weatherDay.dtTxt, style:.date)
-                        .font(.headline)
-                    
-                    
-                        Text( "\(hour < 13 ? "Max temp:" : "Min temp") \(Int(weatherDay.main.temp))"   )
-                    }
-                    }
+                        
+                        
+                        VStack(alignment: .leading) {
+                            Text(weatherDay.dtTxt, style:.date)
+                                .font(.headline)
+                            
+                            
+                                Text( "\(hour < 13 ? "Max temp:" : "Min temp") \(Int(weatherDay.main.temp))"   )
+                        }
                 }
             }
         }
     }
+}
     
     var body: some View {
         NavigationView {
             Form {
+                
                 Section {
                     TextField("Place name", text: $name)
                     TextField("Description", text: $description)
@@ -69,28 +120,24 @@ struct EditView: View {
                 Section("Local Weather") {
                     switch loadingWeatherState {
                     case .loading:
-                        Text("Loading…")
+//                        Text("Loading…")
+                        LoadingCell()
                     case .loaded:
-                              
+                             
                             ForEach(weatherDays, id: \.id) { day in
                                 WeatherCell(weatherDay: day)
-                               
-    //                            +
-    //                            Text(": ")
-                                
-    //                            + Text("\(day.main.temp)")
-    //                                .italic()
+                                    .transition(.slide.animation(.easeIn (duration: 7.0)))
                             }
                         
                     case .failed:
                         Text("Please try again later.")
                     }
                 }
-
                 Section("Nearby…") {
                     switch loadingState {
                     case .loading:
-                        Text("Loading…")
+//                        Text("Loading…")
+                        LoadingCell()
                     case .loaded:
                         ForEach(pages, id: \.pageid) { page in
                             Text(page.title)
@@ -139,6 +186,7 @@ struct EditView: View {
             }
             
         }
+        .navigationBarBackButtonHidden(true)
     }
 
     init(location: Location, onSave: @escaping (Location) -> Void) {
@@ -161,7 +209,10 @@ struct EditView: View {
             let (data, _) = try await URLSession.shared.data(from: url)
             let items = try JSONDecoder().decode(PlacesResponse.self, from: data)
             pages = items.query.pages.values.sorted()
-            loadingState = .loaded
+            let secondsToDelay = 2.3
+            DispatchQueue.main.asyncAfter(deadline: .now() + secondsToDelay) {
+                loadingWeatherState = .loaded
+            }
         } catch {
             loadingState = .failed
         }
@@ -183,7 +234,10 @@ struct EditView: View {
             decoder.dateDecodingStrategy = .formatted(dateFormatter)
             let response = try decoder.decode(WeatherResponse.self, from: data)
             weatherDays = response.list
-            loadingWeatherState = .loaded
+            let secondsToDelay = 3.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + secondsToDelay) {
+                loadingWeatherState = .loaded
+            }
         } catch {
             loadingWeatherState = .failed
             print("\(error)")
