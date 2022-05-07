@@ -22,6 +22,7 @@
 		9062F0AA281DD2B000B8EA25 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9062F0A9281DD2B000B8EA25 /* SoundManager.swift */; };
 		906D6905282035B600D35362 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906D6904282035B600D35362 /* MapView.swift */; };
 		906D690728203C5F00D35362 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906D690628203C5F00D35362 /* ListView.swift */; };
+		B122B5942826E2A000CDD165 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B122B5932826E2A000CDD165 /* AboutView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		9062F0A9281DD2B000B8EA25 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		906D6904282035B600D35362 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		906D690628203C5F00D35362 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		B122B5932826E2A000CDD165 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				906D690628203C5F00D35362 /* ListView.swift */,
 				512C32BB2762CA450050F0B2 /* EditView.swift */,
 				9012090128215D25007F3352 /* NotificationView.swift */,
+				B122B5932826E2A000CDD165 /* AboutView.swift */,
 			);
 			path = Bucketlist;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				901208FE282126D7007F3352 /* PlacesResponse.swift in Sources */,
 				901208FA282126BF007F3352 /* WeatherResponse.swift in Sources */,
 				518D8BCE27641EF300D67BC3 /* ContentView-ViewModel.swift in Sources */,
+				B122B5942826E2A000CDD165 /* AboutView.swift in Sources */,
 				512C32B82762BE010050F0B2 /* Location.swift in Sources */,
 				906D6905282035B600D35362 /* MapView.swift in Sources */,
 				906D690728203C5F00D35362 /* ListView.swift in Sources */,

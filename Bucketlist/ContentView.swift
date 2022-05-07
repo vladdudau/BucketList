@@ -38,7 +38,11 @@ struct ContentView: View {
                     Image(systemName: "bell")
                     Text("Notifications")
                 }
-                .transition(.moveAndFade)
+            AboutView()
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("About")
+                }
             
         }
         .environmentObject(viewModel)

@@ -211,7 +211,7 @@ struct EditView: View {
             pages = items.query.pages.values.sorted()
             let secondsToDelay = 2.3
             DispatchQueue.main.asyncAfter(deadline: .now() + secondsToDelay) {
-                loadingWeatherState = .loaded
+                loadingState = .loaded
             }
         } catch {
             loadingState = .failed
